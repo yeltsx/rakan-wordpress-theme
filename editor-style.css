@@ -1,0 +1,228 @@
+/* =========================================================
+   WordPress Block Editor Styles (editor-style.css)
+   Baseado no tema Rakan / Tailwind output
+   ========================================================= */
+
+/* ===== Base do Editor ===== */
+:root,
+.editor-styles-wrapper {
+  --rakan-bg: #212121;
+  --rakan-surface-1: #262626;
+  --rakan-surface-2: #2e2e2e;
+  --rakan-border: #3a3a3a;
+  --rakan-text-primary: #f2f2f2;
+  --rakan-text-secondary: #c9c9c9;
+  --rakan-text-muted: #9a9a9a;
+  --rakan-primary: #e25507;
+  --rakan-primary-hover: #ff6a1a;
+
+  --rakan-font-body: 'Source Serif 4', Georgia, serif;
+  --rakan-font-heading: 'Libre Baskerville', system-ui, sans-serif;
+  --rakan-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --rakan-leading-tight: 1.2;
+  --rakan-leading-snug: 1.375;
+  --rakan-leading-relaxed: 1.625;
+
+  --rakan-text-xs: 0.875rem;
+  --rakan-text-base: 1rem;
+  --rakan-text-lg: 1.125rem;
+  --rakan-text-xl: 1.25rem;
+  --rakan-text-2xl: 1.5rem;
+  --rakan-text-3xl: 1.875rem;
+  --rakan-text-4xl: 2.25rem;
+  --rakan-text-5xl: 3rem;
+
+  background-color: var(--rakan-bg);
+  color: var(--rakan-text-primary);
+}
+
+
+.editor-styles-wrapper {
+  background-color: var(--rakan-bg);
+  color: var(--rakan-text-primary);
+  font-family: var(--rakan-font-body);
+  line-height: var(--rakan-leading-relaxed);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+}
+
+/* Limite de largura semelhante ao frontend */
+.editor-styles-wrapper .wp-block {
+  max-width: 960px;
+}
+
+.editor-styles-wrapper .wp-block[data-align="wide"] {
+  max-width: 1200px;
+}
+
+.editor-styles-wrapper .wp-block[data-align="full"] {
+  max-width: none;
+}
+
+/* Tipografia */
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4,
+.editor-styles-wrapper h5,
+.editor-styles-wrapper h6 {
+  font-family: var(--rakan-font-heading);
+  color: var(--rakan-text-primary);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.editor-styles-wrapper h1 {
+  font-size: var(--rakan-text-4xl);
+  line-height: var(--rakan-leading-tight);
+}
+
+.editor-styles-wrapper h2 {
+  font-size: var(--rakan-text-3xl);
+  line-height: var(--rakan-leading-tight);
+  margin-top: var(--rakan-spacing-3xl);
+  margin-bottom: var(--rakan-spacing-md);
+}
+
+.editor-styles-wrapper h3 {
+  font-size: var(--rakan-text-2xl);
+  line-height: var(--rakan-leading-snug);
+  margin-top: var(--rakan-spacing-2xl);
+  margin-bottom: var(--rakan-spacing-md);
+}
+
+.editor-styles-wrapper h4 {
+  font-size: var(--rakan-text-xl);
+  line-height: var(--rakan-leading-snug);
+}
+
+.editor-styles-wrapper h5 {
+  font-size: var(--rakan-text-lg);
+}
+
+.editor-styles-wrapper h6 {
+  font-size: var(--rakan-text-base);
+}
+
+/* Parágrafos */
+.editor-styles-wrapper p {
+  color: var(--rakan-text-secondary);
+  font-size: var(--rakan-text-xl);
+  margin-bottom: var(--rakan-spacing-lg);
+}
+
+/* Links */
+.editor-styles-wrapper a {
+  color: var(--rakan-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.editor-styles-wrapper a:hover {
+  color: var(--rakan-primary-hover);
+  text-decoration: underline;
+}
+
+/* Listas */
+.editor-styles-wrapper ul,
+.editor-styles-wrapper ol {
+  margin-left: 1.25rem;
+  margin-bottom: var(--rakan-spacing-lg);
+}
+
+.editor-styles-wrapper li {
+  margin-bottom: 0.5rem;
+}
+
+/* Código inline */
+.editor-styles-wrapper code {
+  background-color: var(--rakan-surface-2);
+  color: var(--rakan-text-primary);
+  font-family: var(--rakan-font-mono);
+  font-size: var(--rakan-text-xs);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--rakan-radius-sm);
+}
+
+/* Blocos de código */
+.editor-styles-wrapper pre {
+  background-color: var(--rakan-surface-1);
+  border: 1px solid var(--rakan-border);
+  border-radius: var(--rakan-radius-md);
+  padding: var(--rakan-spacing-md);
+  overflow-x: auto;
+}
+
+.editor-styles-wrapper pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Blockquote */
+.editor-styles-wrapper blockquote {
+  border-left: 3px solid var(--rakan-primary);
+  padding-left: var(--rakan-spacing-lg);
+  color: var(--rakan-text-secondary);
+  font-style: italic;
+  margin: var(--rakan-spacing-xl) 0;
+}
+
+/* Tabelas */
+.editor-styles-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--rakan-spacing-xl);
+}
+
+.editor-styles-wrapper th,
+.editor-styles-wrapper td {
+  border: 1px solid var(--rakan-border);
+  padding: 0.75rem;
+}
+
+.editor-styles-wrapper th {
+  background-color: var(--rakan-surface-1);
+  color: var(--rakan-text-primary);
+  text-align: left;
+}
+
+/* Separador */
+.editor-styles-wrapper hr {
+  border: none;
+  border-top: 1px solid var(--rakan-border);
+  margin: var(--rakan-spacing-3xl) 0;
+}
+
+/* Botões (ex: bloco Button) */
+.editor-styles-wrapper .wp-block-button__link {
+  background: linear-gradient(135deg, var(--rakan-primary), var(--rakan-primary-hover));
+  color: var(--rakan-text-primary);
+  border-radius: var(--rakan-radius-md);
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.editor-styles-wrapper .wp-block-button__link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(226, 85, 7, 0.35);
+}
+
+/* Imagens */
+.editor-styles-wrapper .wp-block-image img {
+  border-radius: var(--rakan-radius-md);
+}
+
+/* Caption */
+.editor-styles-wrapper figcaption {
+  color: var(--rakan-text-muted);
+  font-size: var(--rakan-text-xs);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Ajustes do editor (UI) */
+.editor-styles-wrapper .block-editor-block-list__layout {
+  padding-top: var(--rakan-spacing-2xl);
+  padding-bottom: var(--rakan-spacing-3xl);
+}
