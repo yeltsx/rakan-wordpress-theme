@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <main id="main" class="site-main" role="main">
-    <div class="mx-auto px-4" style="max-width: 960px;">
+    <div class="mx-auto" style="max-width: 960px;">
         
         <?php if (have_posts()) : ?>
             
@@ -68,11 +68,7 @@
 
                         <div class="post-excerpt">
                             <?php 
-                            // Remove imagens e shortcodes do excerpt
-                            $words = str_word_count($content, 2);
-                            $excerpt = implode(' ', array_slice($words, 0, 150));
-                            
-                            echo '<p>' . $excerpt . '...</p>';
+                            echo the_excerpt();
                             ?>
                             
                             <a href="<?php the_permalink(); ?>" class="read-more-link">

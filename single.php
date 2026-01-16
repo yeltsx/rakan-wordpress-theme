@@ -19,7 +19,7 @@
                 <?php endif; ?>
 
                 <header class="post-header mb-10">
-                    <h1 class="post-title mb-8">
+                    <h1 class="post-title pb-4">
                         <?php the_title(); ?>
                     </h1>
 
