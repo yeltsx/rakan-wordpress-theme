@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <main id="main" class="site-main" role="main">
-    <div class="mx-auto" style="max-width: 960px;">
+    <div class="mx-auto px-4" style="max-width: 960px;">
         
         <?php if (have_posts()) : ?>
             
@@ -14,14 +14,17 @@
                 <article id="post-<?php the_ID(); ?>" <?php post_class('post-item'); ?>>
                     
                     <?php if (has_post_thumbnail()) : ?>
-                        <div class="post-thumbnail">
-                            <?php 
-                            the_post_thumbnail('post-thumbnail', array(
-                                'loading' => 'lazy',
-                                'alt' => get_the_title()
-                            )); 
-                            ?>
-                        </div>
+                        <a href="<?php the_permalink(); ?>" class="post-thumbnail-link">
+                            <div class="post-thumbnail">
+                                <?php 
+                                the_post_thumbnail('post-thumbnail', array(
+                                    'loading' => 'lazy',
+                                    'alt' => get_the_title()
+                                )); 
+                                ?>
+                                <div class="post-overlay"></div>
+                            </div>
+                        </a>
                     <?php endif; ?>
 
                     <div class="post-content-wrapper">
@@ -67,14 +70,60 @@
                         </div>
 
                         <div class="post-excerpt">
-                            <?php 
-                            echo the_excerpt();
-                            ?>
-                            
-                            <a href="<?php the_permalink(); ?>" class="read-more-link">
-                                mais →
-                            </a>
-                        </div>
+    <?php 
+    $content = get_the_content();
+
+    // Remove shortcodes Amazon
+    $content = preg_replace('/\[amazon[^\]]*\]/i', '', $content);
+    
+    // Remove apenas imagens mantendo todo resto intacto
+    $content = preg_replace('/<img[^>]+\>/i', '', $content);
+    $content = preg_replace('/<figure[^>]*>.*?<\/figure>/is', '', $content);
+    
+    // Não aplicar the_content filter para manter formatação original
+    // Apenas processa shortcodes básicos
+    $content = do_shortcode($content);
+    
+    // Conta palavras
+    $word_count = str_word_count(wp_strip_all_tags($content));
+    
+    // Se tiver mais de 150 palavras, trunca mantendo parágrafos completos
+    if ($word_count > 150) {
+        // Separa em parágrafos
+        $paragraphs = explode('</p>', $content);
+        $truncated = '';
+        $current_words = 0;
+        
+        foreach ($paragraphs as $paragraph) {
+            if (empty(trim($paragraph))) continue;
+            
+            $para_words = str_word_count(wp_strip_all_tags($paragraph));
+            
+            if ($current_words + $para_words <= 150) {
+                $truncated .= $paragraph . '</p>';
+                $current_words += $para_words;
+            } else {
+                break;
+            }
+        }
+        
+        echo $truncated;
+    } else {
+        echo wpautop($content);
+    }
+    ?>
+</div>
+
+<?php if ($word_count > 150) : ?>
+    <a href="<?php the_permalink(); ?>" class="read-more-link">
+        mais
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+        </svg>
+    </a>
+<?php endif; ?>
+                       
                     </div>
                 </article>
 
@@ -145,61 +194,5 @@
 
     </div>
 </main>
-
-<script>
-// Compartilhamento nativo com fallback
-document.addEventListener('DOMContentLoaded', function() {
-    const shareButtons = document.querySelectorAll('.share-button');
-    
-    shareButtons.forEach(button => {
-        button.addEventListener('click', async function() {
-            const url = this.dataset.url;
-            const title = this.dataset.title;
-            
-            // Tenta usar API nativa de compartilhamento
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: title,
-                        url: url
-                    });
-                } catch (err) {
-                    if (err.name !== 'AbortError') {
-                        fallbackShare(url);
-                    }
-                }
-            } else {
-                fallbackShare(url);
-            }
-        });
-    });
-    
-    // Fallback: copia URL para clipboard
-    function fallbackShare(url) {
-        navigator.clipboard.writeText(url).then(() => {
-            alert('Link copiado para a área de transferência!');
-        }).catch(() => {
-            prompt('Copie este link:', url);
-        });
-    }
-
-    // Notificações push (se suportado)
-    const notifButton = document.getElementById('enable-notifications');
-    if (notifButton) {
-        notifButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            if ('Notification' in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        alert('Notificações ativadas! Você receberá atualizações.');
-                    }
-                });
-            } else {
-                alert('Seu navegador não suporta notificações.');
-            }
-        });
-    }
-});
-</script>
 
 <?php get_footer(); ?>

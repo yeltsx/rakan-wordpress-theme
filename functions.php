@@ -16,7 +16,10 @@ require_once get_template_directory() . '/inc/menus.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/widgets.php';
 require_once get_template_directory() . '/inc/images.php';
-require_once get_template_directory() . '/inc/editor.php';
+require_once get_template_directory() . '/inc/seo.php';
+require_once get_template_directory() . '/inc/opt.php';
+require_once get_template_directory() . '/inc/amazon.php';
+
 
 /**
  * Theme supports

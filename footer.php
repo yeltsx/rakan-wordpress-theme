@@ -90,32 +90,115 @@
 </footer>
 
 <script>
-// Saudação baseada no horário local do visitante
-function updateGreeting() {
-    const greetingElement = document.querySelector('.greeting-time');
-    if (!greetingElement) return;
-    
-    const hour = new Date().getHours();
-    let greeting;
-    
-    if (hour >= 5 && hour < 12) {
-        greeting = 'Bom dia';
-    } else if (hour >= 12 && hour < 18) {
-        greeting = 'Boa tarde';
-    } else {
-        greeting = 'Boa noite';
-    }
-    
-    greetingElement.textContent = greeting;
-}
+(function () {
+    function updateGreeting() {
+        const greetingElement = document.querySelector('.greeting-time');
+        if (!greetingElement) return;
 
-// Atualiza ao carregar
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateGreeting);
-} else {
-    updateGreeting();
-}
+        const hour = new Date().getHours();
+        let greeting;
+
+        if (hour >= 5 && hour < 12) {
+            greeting = 'Bom dia';
+        } else if (hour >= 12 && hour < 18) {
+            greeting = 'Boa tarde';
+        } else {
+            greeting = 'Boa noite';
+        }
+
+        greetingElement.textContent = greeting;
+    }
+
+    window.addEventListener('DOMContentLoaded', updateGreeting);
+})();
 </script>
+
+<script>
+(function () {
+    'use strict';
+
+    function fallbackShare(url) {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url)
+                    .then(() => {
+                        alert('Link copiado para a área de transferência!');
+                    })
+                    .catch(() => {
+                        prompt('Copie este link:', url);
+                    });
+            } else {
+                prompt('Copie este link:', url);
+            }
+        } catch {
+            prompt('Copie este link:', url);
+        }
+    }
+
+    function initShareButtons() {
+        const buttons = document.querySelectorAll('.share-button');
+        if (!buttons.length) return;
+
+        buttons.forEach(button => {
+            button.addEventListener('click', async function (e) {
+                e.preventDefault();
+
+                const url = this.dataset.url || window.location.href;
+                const title = this.dataset.title || document.title;
+
+                if (navigator.share && window.isSecureContext) {
+                    try {
+                        await navigator.share({ title, url });
+                    } catch (err) {
+                        if (err.name !== 'AbortError') {
+                            fallbackShare(url);
+                        }
+                    }
+                } else {
+                    fallbackShare(url);
+                }
+            });
+        });
+    }
+
+    function initNotifications() {
+        const button = document.getElementById('enable-notifications');
+        if (!button || !('Notification' in window)) return;
+
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            if (!window.isSecureContext) {
+                alert('Notificações só funcionam em HTTPS.');
+                return;
+            }
+
+            if (Notification.permission === 'granted') {
+                alert('Notificações já estão ativadas.');
+                return;
+            }
+
+            if (Notification.permission === 'denied') {
+                alert('Você bloqueou notificações para este site. Verifique as configurações do navegador.');
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    alert('Notificações ativadas!');
+                }
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initShareButtons();
+        initNotifications();
+    });
+
+})();
+</script>
+
 
 </body>
 </html>

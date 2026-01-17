@@ -8,13 +8,14 @@
             <article id="post-<?php the_ID(); ?>" <?php post_class('single-post'); ?>>
 
                 <?php if (has_post_thumbnail()) : ?>
-                    <div class="post-thumbnail mb-8">
-                        <?php
-                        the_post_thumbnail('large', [
-                            'loading' => 'eager',
+                    <div class="post-thumbnail">
+                        <?php 
+                        the_post_thumbnail('post-thumbnail', array(
+                            'loading' => 'lazy',
                             'alt' => get_the_title()
-                        ]);
+                        )); 
                         ?>
+                        <div class="post-overlay"></div>
                     </div>
                 <?php endif; ?>
 
