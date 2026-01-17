@@ -1258,3 +1258,212 @@ header {
     justify-content: center;
   }
 }
+
+/* ========================================
+   Galeria WordPress Customizada
+   ======================================== */
+
+.rakan-gallery {
+  display: grid;
+  gap: var(--rakan-spacing-md);
+  margin: var(--rakan-spacing-xl) 0;
+}
+
+.rakan-gallery-columns-1 {
+  grid-template-columns: 1fr;
+}
+
+.rakan-gallery-columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.rakan-gallery-columns-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.rakan-gallery-columns-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.rakan-gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--rakan-radius-md);
+  background: var(--rakan-surface-1);
+  aspect-ratio: 4/3;
+}
+
+.rakan-gallery-link {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.rakan-gallery-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.rakan-gallery-link:hover img {
+  transform: scale(1.05);
+}
+
+.rakan-gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  color: #fff;
+  padding: var(--rakan-spacing-md);
+  font-size: var(--rakan-text-sm);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.rakan-gallery-link:hover .rakan-gallery-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Lightbox */
+.rakan-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.rakan-lightbox.active {
+  display: flex;
+  opacity: 1;
+}
+
+.rakan-lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rakan-lightbox-image {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--rakan-radius-md);
+}
+
+.rakan-lightbox-caption {
+  color: #fff;
+  text-align: center;
+  margin-top: var(--rakan-spacing-md);
+  font-size: var(--rakan-text-base);
+}
+
+.rakan-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.rakan-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.rakan-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.rakan-lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.rakan-lightbox-prev {
+  left: 20px;
+}
+
+.rakan-lightbox-next {
+  right: 20px;
+}
+
+.rakan-lightbox-counter {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: var(--rakan-text-sm);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rakan-gallery-columns-3,
+  .rakan-gallery-columns-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .rakan-lightbox-nav {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .rakan-lightbox-prev {
+    left: 10px;
+  }
+  
+  .rakan-lightbox-next {
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rakan-gallery-columns-2,
+  .rakan-gallery-columns-3,
+  .rakan-gallery-columns-4 {
+    grid-template-columns: 1fr;
+  }
+}
