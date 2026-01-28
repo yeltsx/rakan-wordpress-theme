@@ -19,6 +19,10 @@ require_once get_template_directory() . '/inc/images.php';
 require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/opt.php';
 require_once get_template_directory() . '/inc/amazon.php';
+require_once get_template_directory() . '/inc/goals.php';
+require_once get_template_directory() . '/inc/products-table.php';
+require_once get_template_directory() . '/inc/reviews.php';
+require_once get_template_directory() . '/inc/dicas.php';
 
 
 /**

@@ -9,9 +9,149 @@
             $post_count = 0;
             while (have_posts()) : the_post(); 
                 $post_count++;
+                $post_type = get_post_type();
+                $is_meta = ($post_type === 'meta');
+                $is_dica = ($post_type === 'dica');
+                
+                // Definir classe do article
+                if ($is_meta) {
+                    $article_class = 'post-card meta-card';
+                } elseif ($is_dica) {
+                    $article_class = 'dica-card';
+                } else {
+                    $article_class = 'post-card';
+                }
             ?>
                 
-                <article id="post-<?php the_ID(); ?>" <?php post_class('post-item'); ?>>
+                <article id="post-<?php the_ID(); ?>" <?php post_class($article_class); ?>>
+                    
+                    <?php if ($is_meta) : 
+                        // ========================================
+                        // CARD DE META
+                        // ========================================
+                        $status = get_post_meta(get_the_ID(), '_meta_status', true);
+                        $progresso = get_post_meta(get_the_ID(), '_meta_progresso', true);
+                        $categoria = get_post_meta(get_the_ID(), '_meta_categoria', true);
+                        $prioridade = get_post_meta(get_the_ID(), '_meta_prioridade', true);
+                        $data_fim = get_post_meta(get_the_ID(), '_meta_data_fim', true);
+                    ?>
+                        
+                        <?php if (has_post_thumbnail()) : ?>
+                            <a href="<?php the_permalink(); ?>" class="post-thumbnail-link">
+                                <div class="post-thumbnail">
+                                    <?php the_post_thumbnail('post-thumbnail', array('loading' => 'lazy', 'alt' => get_the_title())); ?>
+                                    <div class="post-overlay"></div>
+                                </div>
+                            </a>
+                        <?php endif; ?>
+
+                        <div class="post-content-wrapper">
+                            <div class="meta-header">
+                                <span class="meta-badge">Meta</span>
+                                <?php if ($categoria) : ?>
+                                    <span class="meta-categoria-badge"><?php echo get_meta_categoria_icon($categoria); ?></span>
+                                <?php endif; ?>
+                            </div>
+
+                            <h2 class="post-title">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                            </h2>
+
+                            <?php if ($progresso) : ?>
+                                <div class="meta-progress-wrapper">
+                                    <div class="meta-progress-bar">
+                                        <div class="meta-progress-fill" style="width: <?php echo esc_attr($progresso); ?>%"></div>
+                                    </div>
+                                    <span class="meta-progress-text"><?php echo esc_html($progresso); ?>%</span>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="meta-info">
+                                <span class="meta-status meta-status-<?php echo esc_attr($status ?: 'em_andamento'); ?>">
+                                    <?php echo esc_html(get_meta_status_label($status ?: 'em_andamento')); ?>
+                                </span>
+                                <?php if ($data_fim) : ?>
+                                    <span class="meta-deadline">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/>
+                                            <line x1="3" y1="10" x2="21" y2="10"/>
+                                        </svg>
+                                        <?php echo date_i18n('d/m/Y', strtotime($data_fim)); ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="post-excerpt">
+                                <?php echo wp_trim_words(get_the_excerpt(), 30); ?>
+                            </div>
+                            
+                            <a href="<?php the_permalink(); ?>" class="read-more-link">
+                                Ver progresso
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                    <?php elseif ($is_dica) : 
+                        // ========================================
+                        // CARD DE DICA
+                        // ========================================
+                        $tipo = get_post_meta(get_the_ID(), '_dica_tipo', true) ?: 'geral';
+                        $language = get_post_meta(get_the_ID(), '_dica_language', true);
+                    ?>
+                        
+                        <div class="dica-header">
+                            <span class="dica-badge">
+                                <?php echo get_dica_tipo_icon($tipo); ?>
+                                <?php echo get_dica_tipo_label($tipo); ?>
+                            </span>
+                            <?php if ($language) : ?>
+                                <span class="dica-language-badge"><?php echo esc_html($language); ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <h2 class="dica-title">
+                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                        </h2>
+
+                        <div class="dica-meta">
+                            <time datetime="<?php echo get_the_date('c'); ?>">
+                                <?php echo get_the_date(); ?>
+                            </time>
+                            <?php if (comments_open() || get_comments_number()) : ?>
+                                <a href="<?php comments_link(); ?>" class="dica-comments">
+                                    <?php comments_number('0 comentários', '1 comentário', '% comentários'); ?>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="dica-content">
+                            <?php 
+                            $content = get_the_content();
+                            $content = do_shortcode($content);
+                            $word_count = str_word_count(wp_strip_all_tags($content));
+                            
+                            if ($word_count > 100) {
+                                echo wp_trim_words($content, 100, '...');
+                            } else {
+                                echo wpautop($content);
+                            }
+                            ?>
+                        </div>
+
+                        <a href="<?php the_permalink(); ?>" class="dica-link">
+                            Ver dica completa →
+                        </a>
+
+                    <?php else : 
+                        // ========================================
+                        // CARD DE POST NORMAL
+                        // ========================================
+                    ?>
                     
                     <?php if (has_post_thumbnail()) : ?>
                         <a href="<?php the_permalink(); ?>" class="post-thumbnail-link">
@@ -70,61 +210,49 @@
                         </div>
 
                         <div class="post-excerpt">
-    <?php 
-    $content = get_the_content();
+                        <?php 
+                            $content = get_the_content();
+                            $content = do_shortcode($content);
+                            $word_count = str_word_count(wp_strip_all_tags($content));
+                            if ($word_count > 250) {
+                                $paragraphs = explode('</p>', $content);
+                                $truncated = '';
+                                $current_words = 0;
+                                
+                                foreach ($paragraphs as $paragraph) {
+                                    if (empty(trim($paragraph))) continue;
+                                    
+                                    $para_words = str_word_count(wp_strip_all_tags($paragraph));
+                                    
+                                    if ($current_words + $para_words <= 250) {
+                                        $truncated .= $paragraph . '</p>';
+                                        $current_words += $para_words;
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                
+                                echo $truncated;
+                            } else {
+                                echo wpautop($content);
+                            }
+                        ?>
+                        </div>
 
-    // Remove shortcodes Amazon
-    $content = preg_replace('/\[amazon[^\]]*\]/i', '', $content);
-    
-    // Remove apenas imagens mantendo todo resto intacto
-    $content = preg_replace('/<img[^>]+\>/i', '', $content);
-    $content = preg_replace('/<figure[^>]*>.*?<\/figure>/is', '', $content);
-    
-    // Não aplicar the_content filter para manter formatação original
-    // Apenas processa shortcodes básicos
-    $content = do_shortcode($content);
-    
-    // Conta palavras
-    $word_count = str_word_count(wp_strip_all_tags($content));
-    
-    // Se tiver mais de 150 palavras, trunca mantendo parágrafos completos
-    if ($word_count > 150) {
-        // Separa em parágrafos
-        $paragraphs = explode('</p>', $content);
-        $truncated = '';
-        $current_words = 0;
-        
-        foreach ($paragraphs as $paragraph) {
-            if (empty(trim($paragraph))) continue;
-            
-            $para_words = str_word_count(wp_strip_all_tags($paragraph));
-            
-            if ($current_words + $para_words <= 150) {
-                $truncated .= $paragraph . '</p>';
-                $current_words += $para_words;
-            } else {
-                break;
-            }
-        }
-        
-        echo $truncated;
-    } else {
-        echo wpautop($content);
-    }
-    ?>
-</div>
-
-<?php if ($word_count > 150) : ?>
-    <a href="<?php the_permalink(); ?>" class="read-more-link">
-        mais
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"/>
-            <polyline points="12 5 19 12 12 19"/>
-        </svg>
-    </a>
-<?php endif; ?>
+                        <?php if ($word_count > 250) : ?>
+                            <a href="<?php the_permalink(); ?>" class="read-more-link">
+                                mais
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </a>
+                        <?php endif; ?>
                        
                     </div>
+                    
+                    <?php endif; ?>
+                    
                 </article>
 
                 <?php 
